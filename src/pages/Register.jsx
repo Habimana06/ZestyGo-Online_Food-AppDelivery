@@ -7,6 +7,8 @@ import Modal from '../components/Modal';
 const BRAND   = '#F56230';
 const BRAND_D = '#d94e22';
 
+const API_URL = String(import.meta.env.VITE_API_URL || '').replace(/\/+$/, '');
+
 const HERO_IMAGES = [
   "url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=1400')",
   "url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=1400')",
