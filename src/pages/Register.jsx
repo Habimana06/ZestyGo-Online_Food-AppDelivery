@@ -387,7 +387,7 @@ export default function Register() {
                   <PasswordInput value={form.confirmPassword} onChange={set('confirmPassword')} required placeholder="Repeat your password" />
                 </Field>
 
-                {/* terms */}
+                {/* ── TERMS CHECKBOX (fixed: removed duplicate onClick from div) ── */}
                 <label className="flex items-start gap-3 cursor-pointer group">
                   <div className="relative mt-0.5 flex-shrink-0">
                     <input
@@ -399,11 +399,10 @@ export default function Register() {
                     <div
                       className="w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all"
                       style={{
-                        background:   form.terms ? BRAND : 'white',
-                        borderColor:  form.terms ? BRAND : '#e2e8f0',
-                        boxShadow:    form.terms ? `0 0 0 3px ${BRAND}20` : 'none',
+                        background:  form.terms ? BRAND : 'white',
+                        borderColor: form.terms ? BRAND : '#e2e8f0',
+                        boxShadow:   form.terms ? `0 0 0 3px ${BRAND}20` : 'none',
                       }}
-                      onClick={() => setForm(p => ({ ...p, terms: !p.terms }))}
                     >
                       {form.terms && <i className="fas fa-check text-white" style={{ fontSize: 9 }} />}
                     </div>
