@@ -7,7 +7,7 @@ import Modal from '../components/Modal';
 const BRAND   = '#F56230';
 const BRAND_D = '#d94e22';
 
-const API_URL = String(import.meta.env.VITE_API_URL || '').replace(/\/+$/, '');
+const API_URL = 'https://food-ordering-backend.fly.dev';
 
 const HERO_IMAGES = [
   "url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=1400')",
