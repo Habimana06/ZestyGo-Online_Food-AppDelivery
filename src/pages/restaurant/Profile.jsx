@@ -110,11 +110,7 @@ export default function RestaurantProfile() {
     if (!file) return;
     setUploading(true); setError('');
     try {
-      const fd = new FormData();
-      fd.append('image', file);
-      const res  = await fetch(`/api/uploads/restaurant-logo`, { method: 'POST', body: fd });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.message || 'Upload failed');
+      const data = await api.uploads.restaurantLogo(file);
       setForm(f => ({ ...f, image: data.url || '' }));
     } catch (e) {
       setError(e.message || 'Logo upload failed');

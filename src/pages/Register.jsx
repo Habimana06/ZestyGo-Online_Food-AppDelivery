@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { api } from '../api';
 import logo from '../../image/ChatGPT Image Mar 15, 2026, 05_05_02 PM.png';
 import Modal from '../components/Modal';
 
 const BRAND   = '#F56230';
 const BRAND_D = '#d94e22';
-
-const API_URL = 'https://food-ordering-backend.fly.dev';
 
 const HERO_IMAGES = [
   "url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=1400')",
@@ -173,11 +172,7 @@ export default function Register() {
     if (!file) return;
     setLogoUploading(true); setError('');
     try {
-      const fd = new FormData();
-      fd.append('image', file);
-      const res  = await fetch(`/api/uploads/restaurant-logo`, { method: 'POST', body: fd });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.message || 'Upload failed');
+      const data = await api.uploads.restaurantLogo(file);
       setForm(f => ({ ...f, restaurantImage: data.url || '' }));
     } catch (e) {
       setError(e.message || 'Logo upload failed');

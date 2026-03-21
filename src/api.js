@@ -9,6 +9,23 @@ const API_BASE = (() => {
   return normalizedEnvBase;
 })();
 
+/** Multipart upload (no JSON Content-Type — browser sets boundary). */
+const uploadMultipart = async (endpoint, file, fieldName = 'image') => {
+  const token = localStorage.getItem('token');
+  const form = new FormData();
+  form.append(fieldName, file);
+  const res = await fetch(`${API_BASE}${endpoint}`, {
+    method: 'POST',
+    headers: {
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
+    body: form,
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || data.message || 'Upload failed');
+  return data;
+};
+
 const request = async (endpoint, options = {}) => {
   const token = localStorage.getItem('token');
   const headers = {
@@ -40,6 +57,10 @@ const download = async (endpoint) => {
 };
 
 export const api = {
+  /** Use for production: relative /api only works on same host as backend. */
+  uploads: {
+    restaurantLogo: (file) => uploadMultipart('/uploads/restaurant-logo', file),
+  },
   site: {
     getContent: () => request('/site-content'),
   },
@@ -140,21 +161,7 @@ export const api = {
   },
   profile: {
     update: (data) => request('/profile', { method: 'PUT', body: JSON.stringify(data) }),
-    uploadAvatar: async (file) => {
-      const token = localStorage.getItem('token');
-      const form = new FormData();
-      form.append('image', file);
-      const res = await fetch(`${API_BASE}/uploads/avatar`, {
-        method: 'POST',
-        headers: {
-          ...(token && { Authorization: `Bearer ${token}` }),
-        },
-        body: form,
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.message || 'Upload failed');
-      return data;
-    },
+    uploadAvatar: (file) => uploadMultipart('/uploads/avatar', file),
   },
   orders: {
     create: (data) => request('/orders', { method: 'POST', body: JSON.stringify(data) }),
@@ -180,21 +187,7 @@ export const api = {
     updateProfile: (data) => request('/restaurant/profile', { method: 'PUT', body: JSON.stringify(data) }),
     menu: {
       getAll: () => request('/restaurant/menu'),
-      uploadImage: async (file) => {
-        const token = localStorage.getItem('token');
-        const form = new FormData();
-        form.append('image', file);
-        const res = await fetch(`${API_BASE}/restaurant/menu/upload`, {
-          method: 'POST',
-          headers: {
-            ...(token && { Authorization: `Bearer ${token}` }),
-          },
-          body: form,
-        });
-        const data = await res.json().catch(() => ({}));
-        if (!res.ok) throw new Error(data.message || 'Upload failed');
-        return data;
-      },
+      uploadImage: (file) => uploadMultipart('/restaurant/menu/upload', file),
       add: (data) => request('/restaurant/menu', { method: 'POST', body: JSON.stringify(data) }),
       update: (id, data) => request(`/restaurant/menu/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
       remove: (id) => request(`/restaurant/menu/${id}`, { method: 'DELETE' }),

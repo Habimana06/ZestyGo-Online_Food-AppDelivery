@@ -630,10 +630,7 @@ export default function AdminRestaurants() {
                     const file = e.target.files?.[0]; if (!file) return;
                     setLogoUploading(true); setCreateError('');
                     try {
-                      const fd = new FormData(); fd.append('image', file);
-                      const res = await fetch(`/api/uploads/restaurant-logo`, { method: 'POST', body: fd });
-                      const data = await res.json().catch(() => ({}));
-                      if (!res.ok) throw new Error(data.message || 'Upload failed');
+                      const data = await api.uploads.restaurantLogo(file);
                       setCreateForm(f => ({ ...f, restaurantImage: data.url || '' }));
                     } catch (err) { setCreateError(err.message || 'Logo upload failed'); }
                     finally { setLogoUploading(false); }
