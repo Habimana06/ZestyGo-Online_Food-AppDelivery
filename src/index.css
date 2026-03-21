@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-gray-50 text-gray-800;
+  }
+}
+
+@keyframes zestygo-zoom {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.16);
+  }
+}
+
+.zestygo-hero-zoom {
+  animation: zestygo-zoom 10s ease-in-out forwards;
+  will-change: transform;
+}
